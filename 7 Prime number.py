@@ -1,9 +1,9 @@
-#素数判定
+#prime-number
 import math
 import time
 
 start = time.time() 
-a=int(input("値を代入してa="))
+a=int(input("substitute a="))
 
 def isprime(a):
     if a<=1:
@@ -20,6 +20,7 @@ def isprime(a):
     return True
 print(isprime(a))
 
-t = time.time() - start               # 計測終了UNIX時間 -> 計算時間算出
-print(f'計算にかかった時間{t}秒')        # 計算時間表示
+t = time.time() - start             
+print("The time it takes to complete the calculation is {t}sec")        
+        
         

@@ -57,6 +57,11 @@ if ans1==[]:
     
 elapsed_time=time.time()-start1
 print(ans1)
+
+print("x","=",ans1[0][0],"+",b,"t")
+print("y","=",ans1[0][1],"+",-a,"t")
+print("tは任意の定数")
+
 print("elapsed_time:{0}".format(elapsed_time)+"[sec]")
 
 #improvement: calculation

@@ -42,7 +42,6 @@ except ValueError:
 
 P_inv=P.inv_mod(mod)
 print("A×",P,"≡",B,"(mod",mod,")\n")
-print("平文の^-1をかけて逆行列にして両辺に掛ける。左辺を単位行列にする\n")
 print("逆行列P^-1≡",P_inv,"(mod",mod,")\n")
 print("A×",P,"×",P_inv,"≡",B,"×",P_inv,"(mod",mod,")\n")
 print("A≡",B,"×",P_inv,"\n")

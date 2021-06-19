@@ -29,19 +29,13 @@ def insert():
     
     else:#他は考慮しない
         return 
-        
-#def calculate(P,C,A,A_inverse)
-            
-        
-
+                        
 print("平文P、暗号文C、暗号化鍵A、復号化鍵A^-1の中であるものを「1」と代入してください。")
 mod = int(input("mod="))
 P = insert()
 C = insert()
 A = insert()
 A_inverse = insert()
-
-#calculate(P,C,A,A_inverse)
 
 if C!=None and P!=None:
     P_inv=P.inv_mod(mod)

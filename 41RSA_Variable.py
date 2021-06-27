@@ -160,7 +160,7 @@ def secret_key(n,e,p,q):#n,p,q
     return int(d)
         
 def P_C_siz():#1文字ずつ入力する n進数をちゃんと制御したいため
-    P_C_size = int(input("P or Cのsizeは:"))
+    P_C_size = int(input("P or Cのsize(文字数)は:"))
     int_list = []
     for j in range (0,P_C_size):
         int_list.append(int(input("数値を入力,1文字ずつ>>>")))

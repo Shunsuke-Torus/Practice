@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-完
+練習問題対策
 
 Created on Tue Jun 22 09:46:41 2021
 
@@ -42,7 +42,7 @@ def main():
     
     print("RSA")
     print("持っているなら数字を入力、現時点で分からないなら0を入力")#eは絶対 MAX{p,q}<e<Lに必要 
-    str_list = ["n:p*q","e","N","d","P平文:複数なら0","p","q","L","C暗号文:複数なら0"]#公開　n,e 秘密 p,q,L
+    str_list = ["n:p*q","e","N","d","P平文:複数なら0","p","q","L","C暗号文:複数なら0"]#公開　n,e 秘密 p,q,L　
     num_list = []#[]あとで変更
     for i in range (0,len(str_list)):
         print(str_list[i])
@@ -66,7 +66,7 @@ def main():
         else:
             num_list[5] = num_list[0]/num_list[5]#p
             
-    a = int(input("暗号化:0,復号化:1,ディジタル暗号化:2,ディジタル復号化:3,miss:4/t"))
+    a = int(input("暗号化:0,復号化:1,ディジタル暗号化:2,ディジタル復号化:3,miss:4 number:"))
     if a==0:
         P_C_size,int_list=P_C_siz()
         print("暗号化")

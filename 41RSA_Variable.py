@@ -129,7 +129,7 @@ def main():
         print(P)
 
     else:#miss
-        exit() 
+        sys.exit() 
         
 
 #https://ictsr4.com/py/m0120.html

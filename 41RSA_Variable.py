@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-未完
+完
 
 Created on Tue Jun 22 09:46:41 2021
 
@@ -24,6 +24,8 @@ L=LCM(p-1,q-1)=p-1*q-1/gcd(p,q)
 Max{p,q}<e<L and L e が互いに素な数
 gcd(l,e)=1
 
+# MAX{p,q}<e<Lに必要
+
 暗号文C =平文^e mod N
 平文P   =暗号文^d mod N
 
@@ -39,24 +41,24 @@ import sys
 def main():
     
     print("RSA")
-    print("持っているなら数字を入力、持っていないなら0を入力")
-    str_list = ["n","e","N","d","P","p","q","L","C"]#公開　n,e 秘密 p,q,L
-    num_list = [89711,3251,26,0,0,0,0,0,0]#[]あとで変更
-    #for i in range (0,len(str_list)):
-    #    print(str_list[i])
-    #    num_list.append(int(input()))
+    print("持っているなら数字を入力、持っていないなら0を入力")#eは絶対 MAX{p,q}<e<Lに必要 
+    str_list = ["n:p*q","e","N","d","P平文:複数なら0","p","q","L","C暗号文:複数なら0"]#公開　n,e 秘密 p,q,L
+    num_list = []#[]あとで変更
+    for i in range (0,len(str_list)):
+        print(str_list[i])
+        num_list.append(int(input()))
         
-    if num_list[0]==0 and num_list[5]!=0 and num_list[6]:
+    if num_list[0]==0 and num_list[5]!=0 and num_list[6]:#n!=0,p!=0,q!=0
         num_list[0] = num_list[5]*num_list[6]
     
     elif(num_list[0]!=0 and (num_list[5]==0 and num_list[6]==0)):#nがあるがp,qどちらかがないとき　素因数分解
         factorization_box,factorization_size = prime_factorization(num_list[0])#複数の戻り値
          
-        for i in range (0,factorization_size):
+        for i in range (0,factorization_size):#素因数分解で n = p * q
             if num_list[0]==factorization_box[i]*factorization_box[-(i-1)]:
                 num_list[5] = factorization_box[i]
                 num_list[6] = factorization_box[-(i-1)]
-                #break:
+                #break:重複させたくない場合
         
     elif(num_list[0]!=0 and (num_list[5]==0 or num_list[6]==0)):
         if num_list[5]==0:
@@ -72,6 +74,7 @@ def main():
         if P_C_size!=0:
             int_list.reverse()
             P = change_n_to_dec(int_list,num_list[2],P_C_size)#int_list,N,P_size
+            num_list[4] = P
             
         C = calculate(num_list[0],P,num_list[1])#n,P,e→"C or P ≡",i,"^",j,"(mod",n,")"
         print("C:",C)
@@ -99,11 +102,32 @@ def main():
         print("P平文:",P)
         
     elif a==2:
+        P_C_size,int_list=P_C_siz()
         print("ディジタル暗号化")
+        if P_C_size!=0:
+            int_list.reverse()
+            num_list[4] = change_n_to_dec(int_list,num_list[2],P_C_size)#int_list,N,P_size
+            
+        if num_list[3]==0:#d
+            num_list[3] = secret_key(num_list[0],num_list[1],num_list[5],num_list[6]) #d=secret_key(n,e,p,q)
+        C = calculate(num_list[0],num_list[4],num_list[3])#n,P,d → n,i,j
+        C =change_dec_to_n(C,num_list[2])#mistake
         
-        
+        print(C)
     elif a==3:
+        P_C_size,int_list=P_C_siz()
         print("ディジタル復号化")
+        
+        if P_C_size!=0:
+            int_list.reverse()
+            C = change_n_to_dec(int_list,num_list[2],P_C_size)#int_list,N,P_size
+            num_list[8] = C
+        
+        P = calculate(num_list[0],C,num_list[1])#n,C,e→"C or P ≡",i,"^",j,"(mod",n,")"    
+        P = change_dec_to_n(P,num_list[2])
+        
+        print(P)
+
     else:#miss
         exit() 
         
@@ -121,7 +145,8 @@ def prime_factorization(num):
     return sorted(factorization),len(factorization)
 
 #2021/6/27ここから　secret-key make　n,p,qは完成
-#secret_key(num_list[0],num_list[5],num_list[6])        
+#secret_key(num_list[0],num_list[5],num_list[6])  
+      
 def secret_key(n,e,p,q):#n,p,q
     
     L = sympy.lcm(p-1,q-1)
@@ -134,11 +159,11 @@ def secret_key(n,e,p,q):#n,p,q
     
     return int(d)
         
-def P_C_siz():
+def P_C_siz():#1文字ずつ入力する n進数をちゃんと制御したいため
     P_C_size = int(input("P or Cのsizeは:"))
     int_list = []
     for j in range (0,P_C_size):
-        int_list.append(int(input(":")))
+        int_list.append(int(input("数値を入力,1文字ずつ>>>")))
     return P_C_size,int_list        
 
 def calculate (n,i,j):#n,i,j
@@ -168,7 +193,7 @@ def change_n_to_dec(int_list,N,P_size):#n→Dec
         o = pow(N,j)
         int_list[j]=int_list[j]*o
         total +=int_list[j]
-    return total  
+    return int(total)  
 
 if __name__ == "__main__":
     main()

@@ -41,7 +41,7 @@ import sys
 def main():
     
     print("RSA")
-    print("持っているなら数字を入力、持っていないなら0を入力")#eは絶対 MAX{p,q}<e<Lに必要 
+    print("持っているなら数字を入力、現時点で分からないなら0を入力")#eは絶対 MAX{p,q}<e<Lに必要 
     str_list = ["n:p*q","e","N","d","P平文:複数なら0","p","q","L","C暗号文:複数なら0"]#公開　n,e 秘密 p,q,L
     num_list = []#[]あとで変更
     for i in range (0,len(str_list)):

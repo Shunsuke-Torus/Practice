@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 
-練習問題対策
+RSA
 
 Created on Tue Jun 22 09:46:41 2021
 

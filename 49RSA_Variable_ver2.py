@@ -114,7 +114,6 @@ def main():
                 break
             else:
                 raise ValueError
-                sys.exit()
                 
         except ValueError:
              print('入力値が不正です')  
@@ -136,20 +135,17 @@ def dencrypt(C,d,n):#復号化
     
      
 def char_to_int(P_C: str)->int:
-    print(list(P_C))
 
     P_C_list = list(P_C)#1文字ずつ格納
     P_C_size = len(P_C_list)
     total = 0
     num_list = []
-    print(P_C_list)
     for i in range(0,P_C_size):
         num_list.append(ord(P_C_list[i])-32)
     num_list.reverse()
     
     for i in range(0,len(num_list)):
         total += num_list[i]*pow(95,i)#文字　数字　etc 95種類
-        print(total) 
     return total
     
 def int_to_char(P_C_int: int) ->chr: #数字から文字 N=95

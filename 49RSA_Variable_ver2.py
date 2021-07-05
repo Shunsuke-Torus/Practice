@@ -39,12 +39,11 @@ Nを可変ではなく　ASC2にのっとって作成　str_listに直接　P,C�
 """
 #from rsa import Rsa
 import sympy
-import sys
 def main():
     
     print("RSA")
     #N 1024bit~4096bit　推奨　https://ja.wikipedia.org/wiki/RSA%E6%9A%97%E5%8F%B7#n_%E3%82%92%E6%B3%95%E3%81%A8%E3%81%99%E3%82%8B%E5%86%AA%E5%89%B0%E4%BD%99%E3%81%AE%E8%A8%88%E7%AE%97
-    bit = int(input("1024bit　推奨 \n bit:"))
+    bit = int(input("1024bit　推奨 bitが著しく少ないとき復号化不可能になる \n bit:"))
     #bit = pow(2,bit)
     #p
     #p = sympy.randprime(bit-1,bit) 素数が存在しないだと...l48 そりゃそうだな　if 3bitの時 7,8だから範囲内に素数はできない。
@@ -52,11 +51,12 @@ def main():
     #q
     q = sympy.randprime(pow(2,bit-1),pow(2,bit))
     
-    while(1):
-        if p==q:
-            p = sympy.randprime(pow(2,bit-1),pow(2,bit))
-        else:
-            break    
+    if p==q:
+        while(1):
+            if p==q:
+                p = sympy.randprime(pow(2,bit-1),pow(2,bit))
+            else:
+                break    
     #n
     n = p*q
     
@@ -64,11 +64,7 @@ def main():
     L = int(sympy.lcm(p-1,q-1))
     
     #e
-    #max_num = (p,q) tuple型であるため　整数などの反復不可能なデータ型ではエラーをおこす。 https://www.digitalocean.com/community/tutorials/how-to-convert-data-types-in-python-3-ja
-    if p > q :
-        max_num = p
-    else:
-        max_num = q
+    max_num =max(p,q) 
         
     while(1):
         e = sympy.randprime(max_num,L)
@@ -81,11 +77,12 @@ def main():
             print("動作モードを選択してください")
             mode = (int(input("公開鍵:1,秘密鍵:2,暗号化:3,復号化:4,終了:5 \n input:")))
             if mode == 1:
-                print("公開鍵n:\n",n,"\n公開鍵e:\n",e)
+                #print("公開鍵n:\n",n,"\n公開鍵e:\n",e) OZの指摘　マジでありがとう.    
+                print(F"公開鍵n:\n{n}\n公開鍵e:\n{e}")
             elif mode ==2:
                 d = secret_key(e,L)
-                print("公開鍵n:\n",n,"\n公開鍵e:\n",e)
-                print("秘密鍵p:\n",p,"\n秘密鍵q:\n",q,"\n秘密鍵L:\n",L,"\n秘密鍵d:\n",d)
+                print(F"公開鍵n:\n{n}\n公開鍵e:\n{e}")
+                print(F"秘密鍵p:\n{p}\n秘密鍵p:\n{q}\n秘密鍵L:\n{L}\n秘密鍵d:\n{d}")
             elif mode ==3:
                 #P　平文
                 P = (input("文字列を入力　95種類　大文字　小文字　数字 etc \n"))
@@ -120,7 +117,7 @@ def main():
       
 
 def secret_key(e,L):#受信者
-    x,y,t = sympy.gcdex(e,L) #modをこれに入れることができるのでは　プログラムコピーして作って　rsa もう一度
+    x,y,t = sympy.gcdex(e,L) #プログラムコピーして作って　rsa もう一度
     #d
     d = int(x) % L
     return d
@@ -144,7 +141,9 @@ def char_to_int(P_C: str)->int:
         num_list.append(ord(P_C_list[i])-32)
     num_list.reverse()
     
-    for i in range(0,len(num_list)):
+    num_list_size = len(num_list)#OZ　ありがとう　L145とL149の書き方を統一したよ7/5
+    
+    for i in range(0,num_list_size):
         total += num_list[i]*pow(95,i)#文字　数字　etc 95種類
     return total
     

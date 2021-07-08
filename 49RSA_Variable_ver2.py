@@ -36,6 +36,9 @@ Nを可変ではなく　ASC2にのっとって作成　str_listに直接　P,C�
 公開鍵     N L e d 
 秘密鍵     N L e d
 
+参考文献
+https://www.unisys.co.jp/tec_info/tr64/6403.pdf
+https://ja.wikipedia.org/wiki/RSA%E6%9A%97%E5%8F%B7#n_%E3%82%92%E6%B3%95%E3%81%A8%E3%81%99%E3%82%8B%E5%86%AA%E5%89%B0%E4%BD%99%E3%81%AE%E8%A8%88%E7%AE%97
 """
 #from rsa import Rsa
 import sympy
@@ -43,20 +46,18 @@ def main():
     
     print("RSA")
     #N 1024bit~4096bit　推奨　https://ja.wikipedia.org/wiki/RSA%E6%9A%97%E5%8F%B7#n_%E3%82%92%E6%B3%95%E3%81%A8%E3%81%99%E3%82%8B%E5%86%AA%E5%89%B0%E4%BD%99%E3%81%AE%E8%A8%88%E7%AE%97
-    bit = int(input("1024bit　推奨 bitが著しく少ないとき復号化不可能になる \n bit:"))
+    bit = int(input("1024bit　推奨 bitが著しく少ないとき復号化不可能になる \n 暗号鍵の長さbit:"))
+    #4096bit 約10分　
     #bit = pow(2,bit)
     #p
-    #p = sympy.randprime(bit-1,bit) 素数が存在しないだと...l48 そりゃそうだな　if 3bitの時 7,8だから範囲内に素数はできない。
-    p = sympy.randprime(pow(2,bit-1),pow(2,bit))
+    #p = sympy.randprime(bit-1,bit) 素数が存在しないだと...l48 そりゃそうだな　if 3bitの時 7,8だから範囲内に素数はできない。何をやっているのかな
+    #p = sympy.randprime(pow(2,bit-10),pow(2,bit))#if 1024bit=309桁　2048bit=617桁　大体でいいのでは
+    p = sympy.randprime(pow(2,bit-1),pow(2,bit)-1)#10bitをしてしたとき2^10=1024(10)だが10000000000(2)と11bitになるしかし(2,bit)-1で1023となり1111111111(2)10bitの最大値で計算できる。
     #q
-    q = sympy.randprime(pow(2,bit-1),pow(2,bit))
-    
-    if p==q:
-        while(1):
-            if p==q:
-                p = sympy.randprime(pow(2,bit-1),pow(2,bit))
-            else:
-                break    
+    q = sympy.randprime(pow(2,bit-1),pow(2,bit)-1)#sympy.randprime(a,b)a以上b未満の素数を返す
+
+    while(p==q):
+        p = sympy.randprime(pow(2,bit-1),pow(2,bit)-1)
     #n
     n = p*q
     
@@ -82,7 +83,7 @@ def main():
             elif mode ==2:
                 d = secret_key(e,L)
                 print(F"公開鍵n:\n{n}\n公開鍵e:\n{e}")
-                print(F"秘密鍵p:\n{p}\n秘密鍵p:\n{q}\n秘密鍵L:\n{L}\n秘密鍵d:\n{d}")
+                print(F"秘密鍵p:\n{p}\n秘密鍵q:\n{q}\n秘密鍵L:\n{L}\n秘密鍵d:\n{d}")
             elif mode ==3:
                 #P　平文
                 P = (input("文字列を入力　95種類　大文字　小文字　数字 etc \n"))
@@ -117,7 +118,7 @@ def main():
       
 
 def secret_key(e,L):#受信者
-    x,y,t = sympy.gcdex(e,L) #プログラムコピーして作って　rsa もう一度
+    x,y,t = sympy.gcdex(e,L) #modをこれに入れることができるのでは　プログラムコピーして作って　rsa もう一度
     #d
     d = int(x) % L
     return d
@@ -148,23 +149,26 @@ def char_to_int(P_C: str)->int:
     return total
     
 def int_to_char(P_C_int: int) ->chr: #数字から文字 N=95
+    #ユークリッドの互除法　数字を割って最小正剰余で表示
     qlist = []#商の保存先 quotient
     rlist = []#余り remainder
     while(P_C_int>=95):
-        q = P_C_int // 95
-        r = P_C_int % 95
+        q,r = divmod(P_C_int,95)
+        #q = P_C_int // 95
+        #r = P_C_int % 95
         qlist.append(q)#商と余りを式の番号ごとに保存
         rlist.append(r)
         P_C_int = q
-    if P_C_int // 95 < 95:
+    if P_C_int // 95 < 95:#最後の追加の処理は上ではされない設計のため
         r = P_C_int % 95
-        rlist.append(r)    
-    rlist.reverse()
+        rlist.append(r)  
+        
+    rlist.reverse()#反転して1の位から入れる。
     
-    char_list = []
+    char_list = []#数字を文字にする
     for i in range (0,len(rlist)):
-        char_list.append(chr(rlist[i]+32))
-    P_C_char = "".join(char_list)
+        char_list.append(chr(rlist[i]+32))#+32で元の文字に戻す。特殊文字を避けるため
+    P_C_char = "".join(char_list)#"",""を結合する
     
     return P_C_char
 

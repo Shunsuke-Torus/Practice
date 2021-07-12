@@ -50,14 +50,16 @@ def main():
     #4096bit 約10分　
     #bit = pow(2,bit)
     #p
-    #p = sympy.randprime(bit-1,bit) 素数が存在しないだと...l48 そりゃそうだな　if 3bitの時 7,8だから範囲内に素数はできない。何をやっているのかな
-    #p = sympy.randprime(pow(2,bit-10),pow(2,bit))#if 1024bit=309桁　2048bit=617桁　大体でいいのでは
-    p = sympy.randprime(pow(2,bit-1),pow(2,bit)-1)#10bitをしてしたとき2^10=1024(10)だが10000000000(2)と11bitになるしかし(2,bit)-1で1023となり1111111111(2)10bitの最大値で計算できる。
+    #p = sympy.randprime(bit-1,bit) 素数が存在しないだと...l48 そりゃそうだな　if 3bitの時 7,8だから範囲内に素数はできない。
+    #p = sympy.randprime(pow(2,bit-1),pow(2,bit)-1)
+    
+    #if 1024bit=309桁　2048bit=617桁　大体でいいのでは...
+    p = sympy.randprime(pow(2,bit-1),pow(2,bit))#10bitをしてしたとき2^10=1024(10)だが10000000000(2)と11bitになるしかし(2,bit)-1で1023となり1111111111(2)と10bitの最大値で計算できる。
     #q
-    q = sympy.randprime(pow(2,bit-1),pow(2,bit)-1)#sympy.randprime(a,b)a以上b未満の素数を返す
+    q = sympy.randprime(pow(2,bit-1),pow(2,bit))#sympy.randprime(a,b)a以上b未満の素数を返す。未満だったのでbitの形に戻す。
 
     while(p==q):
-        p = sympy.randprime(pow(2,bit-1),pow(2,bit)-1)
+        p = sympy.randprime(pow(2,bit-1),pow(2,bit))
     #n
     n = p*q
     
